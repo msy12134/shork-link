@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import root.common.convention.Result;
 import root.dto.req.UserRegisterDTO;
+import root.dto.req.UserUpdateDTO;
 import root.dto.resp.UserRespDTO;
 import root.service.UserService;
 import root.util.DealSensitiveDataAOP.SensitiveData;
@@ -56,5 +57,11 @@ public class UserController {
         return Result.success();
     }
 
+    @PutMapping("/user")
+    public Result<Void> update(@RequestBody UserUpdateDTO userUpdateDTO){
+        log.info("update: " + userUpdateDTO);
+        userService.update(userUpdateDTO);
+        return Result.success();
+    }
 
 }

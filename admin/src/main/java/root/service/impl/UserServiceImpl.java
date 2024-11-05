@@ -1,5 +1,8 @@
 package root.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.redisson.api.RBloomFilter;
 import org.redisson.api.RLock;
@@ -11,8 +14,10 @@ import root.common.convention.BaseException;
 import root.dao.entity.UserDO;
 import root.dao.mapper.UserMapper;
 import root.dto.req.UserRegisterDTO;
+import root.dto.req.UserUpdateDTO;
 import root.dto.resp.UserRespDTO;
 import root.service.UserService;
+
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements UserService {
 
@@ -61,5 +66,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
             lock.unlock();
         }
 
+    }
+
+    @Override
+    public void update(UserUpdateDTO userUpdateDTO) {
+        //TODO 验证当前用户名是否为登录用户
+        LambdaUpdateWrapper<UserDO> updateWrapper= Wrappers.lambdaUpdate(UserDO.class)
+                .eq(UserDO::getUsername, userUpdateDTO.getUsername());
+        baseMapper.update(BeanUtil.toBean(userUpdateDTO,UserDO.class),updateWrapper);
     }
 }
