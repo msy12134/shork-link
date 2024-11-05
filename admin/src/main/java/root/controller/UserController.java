@@ -4,8 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import root.common.convention.Result;
+import root.dto.req.UserLoginReqDTO;
 import root.dto.req.UserRegisterDTO;
 import root.dto.req.UserUpdateDTO;
+import root.dto.resp.UserLoginRespDTO;
 import root.dto.resp.UserRespDTO;
 import root.service.UserService;
 import root.util.DealSensitiveDataAOP.SensitiveData;
@@ -64,4 +66,17 @@ public class UserController {
         return Result.success();
     }
 
+
+    @PostMapping("/user/login")
+    public Result<UserLoginRespDTO> login(@RequestBody UserLoginReqDTO userLoginReqDTO){
+        log.info("login: " + userLoginReqDTO);
+        return Result.success(userService.login(userLoginReqDTO));
+    }
+
+
+    @GetMapping("/user/check-login")
+    public Result<Boolean> checkLogin(@RequestParam("token") String token,@RequestParam("username") String username){
+        log.info("checkLogin: " + token);
+        return Result.success(userService.checkLogin(username,token));
+    }
 }
